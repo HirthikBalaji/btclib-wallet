@@ -356,6 +356,12 @@ The aggregate accepts `analyze`'s lagging rows (issue btclib-org/.github#1395),
 signatures and SHA pinning are read back (issue btclib-org/.github#1409), and
 `pre-commit` is an ecosystem left unused (issue btclib-org/.github#1391).
 
+### A malformed descriptor's refusal no longer echoes its private keys
+
+`descriptors.parse` and `wallet_policy_descriptor` name what is wrong without
+quoting the descriptor text around it, a WIF or an xprv included (closes #49);
+btclib's bech32 decoder can still quote an `addr()` argument (issue #94).
+
 ## v2026.9.24
 
 ### The wallet layer is a package of its own, `btclib-wallet`
