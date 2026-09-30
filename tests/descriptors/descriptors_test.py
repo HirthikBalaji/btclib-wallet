@@ -1610,9 +1610,8 @@ def test_bip387_vector(descriptor: str, scripts: list[str]) -> None:
 
 
 # BIP387's invalid descriptors, and what each is refused with. The
-# threshold bounds are checked where the script is built, as `multi()`'s
-# are in `ScriptPubKey.p2ms`, so for those the refusal comes from
-# `script_pub_key` and for the rest from `parse`
+# threshold bounds are checked where the script is built, so for those the
+# refusal comes from `script_pub_key` and for the rest from `parse`
 BIP387_INVALID = [
     (f"multi_a(1,{KEY})", "not allowed inside top level"),
     (f"sh(multi_a(1,{KEY}))", "not allowed inside sh"),
@@ -3767,6 +3766,25 @@ def test_a_multisig_of_more_than_twenty_keys_is_refused_at_parse(
     err_msg = rf"^{name}\(\) takes at most 20 keys, 21 given$"
     with pytest.raises(BTClibValueError, match=err_msg):
         parse(wrap.format(f"{name}(1,{keys})"))
+
+
+@pytest.mark.parametrize("threshold", [0, 2], ids=["zero", "above-key-count"])
+@pytest.mark.parametrize(
+    "name,wrap",
+    [
+        ("multi", "sh({})"),
+        ("multi", "wsh({})"),
+        ("sortedmulti", "wsh({})"),
+    ],
+    ids=["sh-multi", "wsh-multi", "wsh-sortedmulti"],
+)
+def test_an_impossible_multisig_threshold_is_refused_at_parse(
+    threshold: int, name: str, wrap: str
+) -> None:
+    """BIP383 lists a threshold of zero or above the key count as invalid."""
+    err_msg = rf"^invalid k in k-of-n {name}: {threshold}$"
+    with pytest.raises(BTClibValueError, match=err_msg):
+        parse(wrap.format(f"{name}({threshold},{KEY})"))
 
 
 @pytest.mark.parametrize("wrap", ["wsh({})", "sh(wsh({}))"], ids=["wsh", "sh-wsh"])

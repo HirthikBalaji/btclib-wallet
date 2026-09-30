@@ -432,10 +432,9 @@ class MultiA:
         it and as the number itself above that, which is what BIP387 says
         and the one place the two spellings differ.
 
-        The bounds are checked here, and not in the parser, for the reason
-        `multi()` has them in `ScriptPubKey.p2ms`: a threshold of none or
-        of more keys than there are describes a script nobody can spend,
-        and a descriptor built by hand reaches this and not the parser.
+        The bounds are checked here, and not in the parser: a threshold of
+        none or of more keys than there are describes a script nobody can
+        spend, and a descriptor built by hand reaches this and not the parser.
         """
         pub_keys = self._pub_keys(index, network, prv_keys)
         if not 1 <= self.threshold <= len(pub_keys):
@@ -2224,10 +2223,11 @@ def _parse_multi(
         )
         for key in args[1:]
     )
+    threshold = int(args[0])
+    if not 1 <= threshold <= len(keys):
+        raise BTClibValueError(f"invalid k in k-of-n {name}: {threshold}")
     _assert_multi_size(name, keys, context)
-    return MultiDescriptor(
-        int(args[0]), keys, sort=name == "sortedmulti", network=network
-    )
+    return MultiDescriptor(threshold, keys, sort=name == "sortedmulti", network=network)
 
 
 def _assert_multi_size(
