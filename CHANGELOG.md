@@ -307,6 +307,17 @@ has the origin (closes #198).
 with a signed input, whose signatures commit to both. It kept signatures that
 no longer verified (closes #211).
 
+### `Miniscript`'s duplicate-key and sanity checks are methods
+
+`has_duplicate_keys`, `is_sane`, `is_sane_subexpression` and `insane_sub`
+were properties. They are methods taking `prv_keys` (issue #199).
+
+### The duplicate-key check derives a hardened step
+
+A key with a hardened step is compared by the public key it derives where
+the descriptor holds its private key, not by its extended key and path. A
+key not derived is compared as written (closes #199) (closes #193).
+
 ## v2026.9.30
 
 ### `README.md` carries the OpenSSF Best Practices badge
