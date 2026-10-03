@@ -208,6 +208,18 @@ compared by its extended key and its path (issue #193).
 `Signed-off-by:` trailer cannot merge, and `REPOSITORY.md` lists
 `lint / Sign-off` among the required checks (issue btclib-org/.github#1550).
 
+### The suite imports btclib_ecc's exception classes from `btclib_ecc`
+
+`tests/exception_family_test.py` imports them from `btclib_ecc.exceptions`,
+since `btclib.exceptions` binds them only up to btclib 2026.9.29
+(closes #166).
+
+### `integration-hwi.yml` installs HWI and Speculos from hashed locks
+
+`.github/integration-hwi/` holds hashed locks of both, installed with
+`--require-hashes`, and the Ledger app is fetched by the commit that tag
+2.5.0 names (closes #167).
+
 ## v2026.9.30
 
 ### `README.md` carries the OpenSSF Best Practices badge
