@@ -301,6 +301,12 @@ It is read as `TX_NO_WITNESS`, so a PSBT with no input is read. The floors are
 `musig()` participant the leaf hashes of its plain leaves, whichever spelling
 has the origin (closes #198).
 
+### `join` refuses to change the lock time or tx version of a signed version 2 psbt
+
+`join` refuses to change the lock time or the tx version of a version 2 psbt
+with a signed input, whose signatures commit to both. It kept signatures that
+no longer verified (closes #211).
+
 ## v2026.9.30
 
 ### `README.md` carries the OpenSSF Best Practices badge
