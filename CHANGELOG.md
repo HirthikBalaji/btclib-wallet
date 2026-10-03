@@ -191,6 +191,17 @@ In `bip39` and `electrum`, `b""`, `0`, `False` and `[]` are refused with
 `btclib_mnemonics`' `BTClibMnemonicsTypeError`, as `slip39` refuses them,
 where they derived the wallet without a passphrase (closes #162).
 
+### A malleable miniscript keeps neither `s`, `f` nor `e`
+
+`Miniscript.properties` drops "s", "f" and "e" from an expression without "m",
+as BIP379 asks, and `is_signature_required` is false there (closes #190).
+
+### The duplicate-key check compares derived public keys
+
+`Miniscript.has_duplicate_keys` compares the public keys the KEY expressions
+derive at index 0, as Bitcoin Core does. A key with a hardened step is
+compared by its extended key and its path (issue #193).
+
 ## v2026.9.30
 
 ### `README.md` carries the OpenSSF Best Practices badge
